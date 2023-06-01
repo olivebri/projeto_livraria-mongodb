@@ -1,6 +1,5 @@
 from bson import ObjectId
 
-
 class Autor:
 
     def __init__(self, nome: str, email: str, telefone: str, bio: str):

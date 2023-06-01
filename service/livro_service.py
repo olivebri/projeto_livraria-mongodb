@@ -11,7 +11,7 @@ from typing import cast
 class LivroService:
 
     def __init__(self, categoria_dao: CategoriaDAO, editora_dao: EditoraDAO, autor_dao: AutorDAO):
-        self.__livro_dao: LivroDAO = LivroDAO()
+        self.__livro_dao: LivroDAO = LivroDAO(categoria_dao, editora_dao, autor_dao)
         self.__categoria_dao: CategoriaDAO = categoria_dao
         self.__editora_dao: EditoraDAO = editora_dao
         self.__autor_dao: AutorDAO = autor_dao
@@ -49,7 +49,7 @@ class LivroService:
                 print('Nenhum livro encontrado!')
 
             for livro in livros:
-                print(f'Id: {livro.id} | Título: {livro.titulo} | Resumo: {livro.resumo} | Ano: {str(livro.ano)} | Páginas: {str(livro.paginas)} | Isbn: {livro.isbn} | Categoria: {livro.categoria.nome} | Editora: {livro.editora.nome}  | Autor: {livro.autor.nome}')
+                print(f'Id: {livro.id} | Título: {livro.titulo} | Resumo: {livro.resumo} | Ano: {str(livro.ano)} | Páginas: {str(livro.paginas)} | Isbn: {livro.isbn} | Código: {livro.codigo} | Categoria: {livro.categoria.nome} | Editora: {livro.editora.nome}  | Autor: {livro.autor.nome}')
         except Exception as e:
             print(f'Erro ao exibir os livros! - {e}')
             return
@@ -60,7 +60,6 @@ class LivroService:
         print('\nAdicionando categoria...')
 
         try:
-            id = self.__livro_dao.ultimo_id() + 1
             titulo = input('Digite o título do livro: ')
             resumo = input('Digite o resumo do livro: ')
             ano = int(input('Digite o ano do livro: '))
@@ -72,12 +71,12 @@ class LivroService:
             for c in lista_categorias:
                 print(f'{c.id} | {c.nome}')
 
-            id_categoria = int(input('Digite o ID da categoria do livro: '))
+            id_categoria = input('Digite o ID da categoria do livro: ')
             categoria: Categoria = self.__categoria_dao.buscar_por_id(id_categoria)
 
             while(categoria == None):
                 print('Categoria não existente!')
-                id_categoria = int(input('Digite o ID da categoria do livro: '))
+                id_categoria = input('Digite o ID da categoria do livro: ')
                 categoria: Categoria = self.__categoria_dao.buscar_por_id(id_categoria)
 
             print('Editoras de Livro:')
@@ -85,12 +84,12 @@ class LivroService:
             for e in lista_editoras:
                 print(f'{e.id} | {e.nome}')
 
-            id_editora = int(input('Digite o ID da editora do livro: '))
+            id_editora = input('Digite o ID da editora do livro: ')
             editora: Editora = self.__editora_dao.buscar_por_id(id_editora)
 
             while(editora == None):
                 print('Editora não existente!')
-                id_editora = int(input('Digite o ID da editora do livro: '))
+                id_editora = input('Digite o ID da editora do livro: ')
                 editora: Editora = self.__editora_dao.buscar_por_id(id_editora)
 
             print('Autores de Livro:')
@@ -98,15 +97,15 @@ class LivroService:
             for a in lista_autores:
                 print(f'{a.id} | {a.nome}')
 
-            id_autor = int(input('Digite o ID do autor do livro: '))
+            id_autor = input('Digite o ID do autor do livro: ')
             autor: Autor = self.__autor_dao.buscar_por_id(id_autor)
 
             while(autor == None):
                 print('Autor não existente!')
-                id_autor = int(input('Digite o ID do autor do livro: '))
+                id_autor = input('Digite o ID do autor do livro: ')
                 autor: Autor = self.__autor_dao.buscar_por_id(id_autor)
 
-            novo_livro = Livro(id, titulo, resumo, ano, paginas, isbn, categoria, editora, autor)
+            novo_livro = Livro(titulo, resumo, ano, paginas, isbn, categoria, editora, autor)
 
             self.__livro_dao.adicionar(novo_livro)
             print('Livro adicionado com sucesso!')
@@ -120,7 +119,7 @@ class LivroService:
         print('\nRemovendo livro...')
 
         try:
-            livro_id = int(input('Digite o ID do livro para excluir: '))
+            livro_id = input('Digite o ID do livro para excluir: ')
             if (self.__livro_dao.remover(livro_id)):
                 print('Livro excluído com sucesso!')
             else:
@@ -135,13 +134,13 @@ class LivroService:
         print('\nLivro por Id...')
 
         try:
-            id = int(input('Digite o Id do livro para buscar: '))
+            id = input('Digite o Id do livro para buscar: ')
             liv = self.__livro_dao.buscar_por_id(id)
 
             if (liv == None):
                 print('Livro não encontrado!')
             else:
-                print(f'Id: {liv.id} | Título: {liv.titulo} | Resumo: {liv.resumo} | Ano: {str(liv.ano)} | Páginas: {str(liv.paginas)} | Isbn: {liv.isbn} | Categoria: {liv.categoria.nome}  | Editora: {liv.editora.nome}  | Autor: {liv.autor.nome}')
+                print(f'Id: {liv.id} | Título: {liv.titulo} | Resumo: {liv.resumo} | Ano: {str(liv.ano)} | Páginas: {str(liv.paginas)} | Isbn: {liv.isbn} | Código: {liv.codigo} | Categoria: {liv.categoria.nome}  | Editora: {liv.editora.nome}  | Autor: {liv.autor.nome}')
         except Exception as e:
             print(f'Erro ao exibir livro! - {e}')
             return     
